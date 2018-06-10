@@ -5,7 +5,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import WebDriverException
 
 
 def get_category_url(context, category_name):
@@ -24,11 +23,8 @@ def wait_for_text(context):
     text_present = EC.text_to_be_present_in_element((By.CSS_SELECTOR, 'body'),"Hepsiburada.com, Bir Doğan Online Markasıdır.")
     WebDriverWait(context.browser, 5).until(text_present)
 
-def ajax_complete(context):
-    try:
-        return 0 == context.execute_script("return jQuery.active")
-    except WebDriverException:
-        pass
+def wait_ajax_complete(context):
+    WebDriverWait(context.browser, 10).until(lambda driver: driver.execute_script("return jQuery.active === 0"))
 
 def visit(context, location=''):
     context.browser.get(location)
@@ -110,4 +106,4 @@ def delete_products_on_cart(context):
     cart_items = context.browser.find_elements_by_css_selector("#form-item-list > ul > li")
     for i in range(len(cart_items),0,-1):
         context.browser.find_element_by_css_selector("#form-item-list > ul > li:nth-child("+ str(i) +") > div > div.product-detail > div.utils > a.btn-delete").click()
-        WebDriverWait(context.browser, 10).until(lambda driver: driver.execute_script("return jQuery.active === 0"))
+        wait_ajax_complete(context)
