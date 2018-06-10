@@ -10,6 +10,7 @@ def before_feature(context, feature):
     context.browser = webdriver.Chrome(
         chrome_options=chrome_options,
         executable_path="/home/sinan/Downloads/selenium/chromedriver")
+        # C:\Users\sinan\Downloads\chromedriver_win32_2.0\chromedriver.exe
     context.browser.implicitly_wait(3)
 
 
