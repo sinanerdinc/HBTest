@@ -1,3 +1,4 @@
+@headless
 Feature: Üye girişi yapmadan ilerleyen testler
 
   Scenario: Kullanıcı girişi yapmadan belirtilen bir ürünü sepete ekleme.

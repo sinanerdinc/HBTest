@@ -41,15 +41,13 @@ def step_i_am_on_home_page(context):
 @when('Üye girişi yaptığımda')
 def step_login(context):
     visit(context, get_storefront_url(context,"login"))
-
     emailField = context.browser.find_element_by_id("email")
     emailField.send_keys(get_login_info(context,"mail"))
-
     passwordField = context.browser.find_element_by_id("password")
     passwordField.send_keys(get_login_info(context,"password"))
-
     loginButton = context.browser.find_element_by_css_selector("#form-login > div.form-actions > button")
     loginButton.click()
+    wait_for_text(context)
 
 @then('Başarıyla giriş yaptığımı görmeliyim.')
 def step_success_login(context):
@@ -74,7 +72,6 @@ def step_impl(context, quantity):
     quantity_text = context.browser.find_element_by_xpath('//*[@id="short-summary"]/div[1]/p/span').text
     assert quantity_text == quantity + " ürün", "Sepette '{} ürün' değil, '{}' var.".format(quantity,quantity_text)
 
-
 @then('Sayfada "{contain_text}" metnini görmeliyim.')
 def step_page_source_contain_text(context, contain_text):
     bodyText = context.browser.find_element_by_tag_name("body").text
@@ -91,6 +88,7 @@ def step_impl(context, mp_quantity):
     assert len(mp_div.find_elements_by_xpath('//tr')) >= int(mp_quantity)
 
 @given('Sayfada "{match}" sıradaki tedarikçiden ürünü sepete atarsam')
+@when('Sayfada "{match}" sıradaki tedarikçiden ürünü sepete atarsam')
 def step_match_merchant(context, match):
     match = match.replace(".","")
     mp_div = context.browser.find_element_by_css_selector('div.marketplace-list > table > tbody > tr:nth-child('+ match +') > td.form-area > div')

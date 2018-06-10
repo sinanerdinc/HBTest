@@ -1,3 +1,4 @@
+@headless
 Feature: Üye girişi ile ilgili testler
 
   Scenario: Kullanıcı başarıyla giriş yapar.
@@ -10,9 +11,9 @@ Feature: Üye girişi ile ilgili testler
     When    Sonuçlar içerisinden ilk ürüne tıkladığımda
     Then    En az "2" adet satıcı görmeliyim.
 
-  Scenario: Farklı tedarikçilerden ürünü sepete atmak.
+  Scenario: Kullanıcı, farklı tedarikçilerden ürünü sepete atar.
     Given   Sayfada "1." sıradaki tedarikçiden ürünü sepete atarsam
     When    Alışverişe devam et butonuna tıkladığımda
-    Given   Sayfada "2." sıradaki tedarikçiden ürünü sepete atarsam
+    When    Sayfada "2." sıradaki tedarikçiden ürünü sepete atarsam
     Then    Sepette "2" ürün olduğunu görmeliyim.
     Then    Ekran görüntüsü almalıyım.
