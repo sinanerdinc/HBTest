@@ -93,6 +93,7 @@ selenium/
 bin/
 include/
 pip-selfcheck.json
+.idea
 
 # Spyder project settings
 .spyderproject
