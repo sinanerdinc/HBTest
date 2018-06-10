@@ -25,9 +25,8 @@ def before_feature(context, feature):
     }
 
     context.LOGIN_INFO = {
-        "mail":     "mail@gmail.com",
-        "password": "pass",
-        "name":     "Sinan Erdinç"
+        "mail":     "test@guerrillamail.com",
+        "password": "test112233"
     }
 
 def after_feature(context, scenario):
