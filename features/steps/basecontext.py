@@ -1,10 +1,11 @@
 import datetime
+import time
 from behave import *
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import WebDriverException
 
 
 def get_category_url(context, category_name):
@@ -20,11 +21,14 @@ def get_login_info(context, info):
     return context.LOGIN_INFO[info]
 
 def wait_for_text(context):
+    text_present = EC.text_to_be_present_in_element((By.CSS_SELECTOR, 'body'),"Hepsiburada.com, Bir Doğan Online Markasıdır.")
+    WebDriverWait(context.browser, 5).until(text_present)
+
+def ajax_complete(context):
     try:
-        logo_present = EC.text_to_be_present_in_element((By.TAG_NAME, 'body'),"Hepsiburada.com, Bir Doğan Online Markasıdır.")
-        WebDriverWait(context.browser, 5).until(logo_present)
-    except TimeoutException:
-        print("\n Time Out \n")
+        return 0 == context.execute_script("return jQuery.active")
+    except WebDriverException:
+        pass
 
 def visit(context, location=''):
     context.browser.get(location)
@@ -47,11 +51,13 @@ def step_login(context):
     passwordField.send_keys(get_login_info(context,"password"))
     loginButton = context.browser.find_element_by_css_selector("#form-login > div.form-actions > button")
     loginButton.click()
-    wait_for_text(context)
 
 @then('Başarıyla giriş yaptığımı görmeliyim.')
 def step_success_login(context):
-    assert "Hesabım" in context.browser.find_element_by_id("MyAccount").text, "Hesabım metni sağ üstteki myaccount classında yok."
+    wait_for_text(context)
+    text_present = EC.text_to_be_present_in_element((By.ID, 'MyAccount'),"Hesabım")
+    WebDriverWait(context.browser, 10).until(text_present)
+    #assert "Hesabım" in context.browser.find_element_by_id("MyAccount").text, "Hesabım metni sağ üstteki myaccount classında yok."
 
 @given('Sitede "{category_name}" kategorisine gidersem')
 def step_i_am_on_category(context, category_name):
@@ -97,3 +103,11 @@ def step_match_merchant(context, match):
 @when('Alışverişe devam et butonuna tıkladığımda')
 def step_click_continue_shopping(context):
     context.browser.find_element_by_css_selector("#cart-container > section > div.box.umbrella > div > a").click()
+
+@when('Sepetimdeki tüm ürünleri sildiğimde')
+def delete_products_on_cart(context):
+    visit(context, get_storefront_url(context,"cart"))
+    cart_items = context.browser.find_elements_by_css_selector("#form-item-list > ul > li")
+    for i in range(len(cart_items),0,-1):
+        context.browser.find_element_by_css_selector("#form-item-list > ul > li:nth-child("+ str(i) +") > div > div.product-detail > div.utils > a.btn-delete").click()
+        WebDriverWait(context.browser, 10).until(lambda driver: driver.execute_script("return jQuery.active === 0"))

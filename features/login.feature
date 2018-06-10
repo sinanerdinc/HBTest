@@ -7,6 +7,7 @@ Feature: Üye girişi ile ilgili testler
     Then    Başarıyla giriş yaptığımı görmeliyim.
 
   Scenario: Kullanıcı sitede arama yapar, ilk ürüne girer ve minumum 2 satıcı olduğunu doğrular.
+    When    Sepetimdeki tüm ürünleri sildiğimde
     When    Sitede "drone" araması yaptığımda
     When    Sonuçlar içerisinden ilk ürüne tıkladığımda
     Then    En az "2" adet satıcı görmeliyim.
