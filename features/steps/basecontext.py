@@ -68,7 +68,7 @@ def step_click_addtocart(context):
     context.browser.find_element_by_id('addToCart').click()
 
 @then('Sepette "{quantity}" ürün olduğunu görmeliyim.')
-def step_impl(context, quantity):
+def step_check_quantity_in_cart(context, quantity):
     visit(context, get_storefront_url(context,"cart"))
     assert context.browser.find_element_by_css_selector('#short-summary > div.box-content  > h2').text == "Sipariş Özeti", "Sipariş Özeti metni bulunamadı."
     quantity_text = context.browser.find_element_by_xpath('//*[@id="short-summary"]/div[1]/p/span').text
@@ -85,7 +85,7 @@ def step_search(context, phrase):
     search_input.send_keys(phrase + Keys.RETURN)
 
 @then('En az "{mp_quantity}" adet satıcı görmeliyim.')
-def step_impl(context, mp_quantity):
+def step_check_marketplace(context, mp_quantity):
     mp_div = context.browser.find_element_by_css_selector('div.marketplace-list > table > tbody')
     assert len(mp_div.find_elements_by_xpath('//tr')) >= int(mp_quantity)
 
